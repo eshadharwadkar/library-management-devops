@@ -12,9 +12,10 @@ RUN apt-get update && apt-get install -y \
 
 RUN a2enmod rewrite
 
-# Copy ONLY library folder (main PHP app)
+# Copy library project directly into apache root
 COPY library/ /var/www/html/
 
+# Fix permissions
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
 
