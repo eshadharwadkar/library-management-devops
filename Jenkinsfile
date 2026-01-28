@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        IMAGE_NAME = "library-app"
-        CONTAINER_NAME = "library-container"
-    }
-
     stages {
         stage('Clone Repo') {
             steps {
@@ -15,19 +10,20 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME .'
+                bat 'docker build -t library-app .'
             }
         }
 
         stage('Stop Old Container') {
             steps {
-                sh 'docker rm -f $CONTAINER_NAME || true'
+                bat 'docker stop library-container || exit 0'
+                bat 'docker rm library-container || exit 0'
             }
         }
 
         stage('Run New Container') {
             steps {
-                sh 'docker run -d -p 8085:80 --name $CONTAINER_NAME $IMAGE_NAME'
+                bat 'docker run -d -p 8085:80 --name library-container library-app'
             }
         }
     }
