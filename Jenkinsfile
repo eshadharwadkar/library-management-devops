@@ -2,9 +2,10 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone Repo') {
+
+        stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/eshadharwadkar/library-management-devops.git'
+                git 'https://github.com/eshadharwadkar/library-management-devops.git'
             }
         }
 
@@ -16,14 +17,14 @@ pipeline {
 
         stage('Stop Old Container') {
             steps {
-                bat 'docker stop library-container || exit 0'
-                bat 'docker rm library-container || exit 0'
+                bat 'docker stop library-app || exit 0'
+                bat 'docker rm library-app || exit 0'
             }
         }
 
-        stage('Run New Container') {
+        stage('Run Container') {
             steps {
-                bat 'docker run -d -p 8085:80 --name library-container library-app'
+                bat 'docker run -d -p 9090:80 --name library-app library-app'
             }
         }
     }
